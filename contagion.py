@@ -1,7 +1,7 @@
 import numpy as np
 
 def regress(threshold):
-  return np.vectorize(lambda x: 1 if x <= threshold else 0)
+  return np.vectorize(lambda x: 1 if x >= threshold else 0)
 
 classify = regress(0.5)
 
@@ -13,13 +13,13 @@ def perturb(arr):
   return np.apply_along_axis(flip_when, 2, np.dstack((arr, changes))).flatten()
 
 def create_population(pop_size):
-  return classify(np.random.uniform(0,1,[pop_size]))
+  return np.random.uniform(0,1,[pop_size])
 
 def create_interactions(pop_size):
-  return (1 - np.eye(pop_size)) * classify(np.random.uniform(0,1,[pop_size, pop_size]))
+  return (1 - np.eye(pop_size)) * np.random.uniform(0,1,[pop_size, pop_size])
 
 def timestep(population, interactions):
-  return perturb(classify(np.dot(population, interactions)/interactions.sum(1)))
+  return perturb(np.dot(population, interactions)/interactions.sum(1))
 
 if __name__ == "__main__":
   states = ["sad", "happy"]
@@ -28,12 +28,12 @@ if __name__ == "__main__":
   population = create_population(len(people))
   interactions = create_interactions(len(people))
 
-  for (friends, person) in zip(interactions, people):
+  for (friends, person) in zip(classify(interactions), people):
     friends_list = ", ".join([people[idx] for (idx, known)  in enumerate(friends) if known])
     print "{} knows {}".format(person, friends_list)
 
   for (state, person) in zip(population, people):
-    print "{} is {}".format(person, states[state])
+    print "{} is {}".format(person, states[classify(state)])
 
   iters = 0
   initial_state = population
@@ -45,12 +45,12 @@ if __name__ == "__main__":
     iters = iters + 1
     print "timestep {}".format(iters)
 
-    for (idx, changed) in enumerate(current_state != last_state):
+    for (idx, changed) in enumerate(classify(current_state) != classify(last_state)):
       if changed:
-        print "{} changed from {} to {}".format(people[idx], states[last_state[idx]], states[current_state[idx]])
+        print "{} changed from {} to {}".format(people[idx], states[classify(last_state[idx])], states[classify(current_state[idx])])
 
-    if iters > 100 or np.allclose(last_state, current_state):
+    if iters > 100 or np.allclose(classify(last_state), classify(current_state)):
       break
 
-  for (final_state, initial_state, person) in zip(current_state, initial_state, people):
+  for (final_state, initial_state, person) in zip(classify(current_state), classify(initial_state), people):
     print "{} started {} and ended {}".format(person, states[initial_state], states[final_state])
