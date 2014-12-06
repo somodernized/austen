@@ -21,8 +21,7 @@ def create_interactions(pop_size):
 def timestep(population, interactions):
   return perturb(np.dot(population, interactions)/interactions.sum(1))
 
-class Contagion:
-  
+if __name__ == "__main__":
   states = ["sad", "happy"]
   people = ["Lera Bumbrey", "Orpha Penrose", "Tyron Belmont", "Dennise Tinsley", "Harlan Molina", "Jessi Tomita", "Vennie Bracken", "Sofia Gebhard", "Adam Rux", "Elden Danielson"]
 
@@ -40,11 +39,9 @@ class Contagion:
   initial_state = population
   last_state = population
   current_state = population
-  all_states = [population]
   while True:
     last_state = current_state
     current_state = timestep(current_state, interactions)
-    all_states.append(current_state)
     iters = iters + 1
     print "timestep {}".format(iters)
 
@@ -57,10 +54,3 @@ class Contagion:
 
   for (final_state, initial_state, person) in zip(classify(current_state), classify(initial_state), people):
     print "{} started {} and ended {}".format(person, states[initial_state], states[final_state])
-
-if __name__ == "__main__":
-  c = Contagion
-"""
-  f = open("d3/contagion_results.pkl", "wb")
-  pickle.dump([all_states, interactions], f)
-"""
