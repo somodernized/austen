@@ -59,8 +59,4 @@ class Contagion:
     print "{} started {} and ended {}".format(person, states[initial_state], states[final_state])
 
 if __name__ == "__main__":
-  c = Contagion
-"""
-  f = open("d3/contagion_results.pkl", "wb")
-  pickle.dump([all_states, interactions], f)
-"""
+  C = Contagion
