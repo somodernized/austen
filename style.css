@@ -1,0 +1,56 @@
+body {
+	font-family:Roboto Condensed,Helvetica,Arial,Sans-Serif;
+}
+
+#controls, #graph-root {
+	border: 1px solid grey;
+	border-radius: 5px;
+}
+
+#controls {
+	padding: 1em 1.3em;
+	width:248px;
+	float:left;
+}
+
+#slider, #toolbar, #controls ul {margin-top:1em;}
+
+ul {
+	list-style-type: none;
+	margin:0;
+	padding:0;
+}
+
+.state {font-weight:bold;}
+.happy .state {color:#ff7f0e;}
+.sad .state {color:#1f77b4;}
+
+.node {
+    stroke: #fff;
+    stroke-width: 1.5px;
+	transition: fill .25s ease;
+}
+
+.node.happy { fill: #ff7f0e; }
+.node.sad { fill: #1f77b4; }
+
+.link {
+    stroke: #999;
+    stroke-opacity: .6;
+}
+
+#step-counter {font-weight:bold;border:none;}
+
+#toolbar {
+	padding: 4px;
+	display: inline-block;
+}
+/* support: IE7 */
+*+html #toolbar {
+	display: inline;
+}
+
+#graph-root {
+	float:left;
+	margin-left:8px;
+}
